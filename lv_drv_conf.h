@@ -79,6 +79,7 @@
 /*********************
  *  DISPLAY DRIVERS
  *********************/
+#define USE_FBDEV 1
 
 /*-------------------
  *  SDL
@@ -431,13 +432,15 @@
 #if USE_LIBINPUT || USE_BSD_LIBINPUT
 /*If only a single device of the same type is connected, you can also auto detect it, e.g.:
  *#define LIBINPUT_NAME   libinput_find_dev(LIBINPUT_CAPABILITY_TOUCH, false)*/
-#  define LIBINPUT_NAME   "/dev/input/event0"        /*You can use the "evtest" Linux tool to get the list of devices and test them*/
+#  define LIBINPUT_NAME   "/dev/input/event5"        /*You can use the "evtest" Linux tool to get the list of devices and test them*/
 
 #endif  /*USE_LIBINPUT || USE_BSD_LIBINPUT*/
 
 /*-------------------------------------------------
  * Mouse or touchpad as evdev interface (for Linux based systems)
  *------------------------------------------------*/
+#define USE_EVDEV 1
+
 #ifndef USE_EVDEV
 #  define USE_EVDEV           1
 #endif
@@ -447,8 +450,15 @@
 #endif
 
 #if USE_EVDEV || USE_BSD_EVDEV
-#  define EVDEV_NAME   "/dev/input/event10"        /*You can use the "evtest" Linux tool to get the list of devices and test them*/
+#  define EVDEV_NAME   "/dev/input/event3"        /*You can use the "evtest" Linux tool to get the list of devices and test them*/
 #  define EVDEV_SWAP_AXES         0               /*Swap the x and y axes of the touchscreen*/
+
+
+#  define EVDEV_SCALE             1               /* Scale input, e.g. if touchscreen resolution does not match display resolution */
+#  if EVDEV_SCALE
+#    define EVDEV_SCALE_HOR_RES     (720)          /* Horizontal resolution of touchscreen */
+#    define EVDEV_SCALE_VER_RES     (1440)          /* Vertical resolution of touchscreen */
+#  endif  /*EVDEV_SCALE*/
 
 #  define EVDEV_CALIBRATE         0               /*Scale and offset the touchscreen coordinates by using maximum and minimum values for each axis*/
 
